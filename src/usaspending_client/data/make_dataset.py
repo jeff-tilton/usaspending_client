@@ -28,16 +28,14 @@ def clean_data():
     pass
 
 
-
-
 @click.command()
-@click.option('--input_filepath', '-ip',  default=None, type=click.Path(exists=True))
-@click.option('--output_filepath', '-op', default=None, type=click.Path())
+@click.option("--input_filepath", "-ip", default=None, type=click.Path(exists=True))
+@click.option("--output_filepath", "-op", default=None, type=click.Path())
 def make_data(input_filepath, output_filepath):
-    """ Runs data processing scripts to turn raw data from (../raw) into
-        cleaned data ready to be analyzed (saved in ../processed).
+    """Runs data processing scripts to turn raw data from (../raw) into
+    cleaned data ready to be analyzed (saved in ../processed).
     """
-    LOGGER.info('making final data set from raw data')
+    LOGGER.info("making final data set from raw data")
 
     get_data()
     clean_data()
