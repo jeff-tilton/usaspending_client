@@ -1,3 +1,5 @@
+import json
+
 import pytest
 
 from usaspending_client import USASpending
@@ -9,9 +11,9 @@ def usa():
     yield usa
 
 
-class TestClient(object):
-    def test_bulk_download_awards_200_response(self, usa):
-        filters = {
+data_tests = [
+    (
+        {
             "prime_award_types": [
                 "A",
                 "B",
@@ -48,5 +50,42 @@ class TestClient(object):
                 }
             ],
         }
+    ),
+]
 
+
+class TestClient(object):
+    @pytest.mark.parametrize(
+        "filters",
+        data_tests,
+    )
+    def test_bulk_download_awards_200_response(self, filters, usa):
         assert usa.bulk_download_awards(filters=filters).status_code == 200
+
+    @pytest.mark.parametrize(
+        "filters",
+        data_tests,
+    )
+    def test_bulk_download_status_200_response(self, filters, usa):
+
+        response = usa.bulk_download_awards(filters=filters)
+
+        assert response.status_code == 200
+
+        data = json.loads(response.text)
+
+        file_name = data["file_name"]
+
+        response = usa.bulk_download_status(file_name=file_name)
+
+        assert response.status_code == 200
+
+    @pytest.mark.parametrize(
+        "filters",
+        data_tests,
+    )
+    def test_awards_to_df(self, filters, usa):
+
+        df = usa.awards(filters=filters)
+
+        assert not df.empty()
