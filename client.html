@@ -26,13 +26,32 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">import requests
+<pre><code class="python">import logging
+import sys
+import json
+
+from io import BytesIO
+from urllib.request import urlretrieve
+from urllib.request import urlopen
+import shutil
+import requests
+import pandas as pd
+from zipfile import ZipFile
+
+from .utils import log_decorator
+
+
+LOGGER = logging.getLogger(__name__)
+LD = log_decorator(LOGGER)
+FORMAT = &#34;%(levelname)s - %(asctime)s - %(name)s - %(message)s&#34;
 
 
 class USASpending:
-    def __init__(self):
+    def __init__(self, verbosity=10):
         self.BASE_URL = &#34;https://api.usaspending.gov&#34;
+        logging.basicConfig(stream=sys.stderr, level=verbosity, format=FORMAT)
 
+    @LD
     def bulk_download_awards(
         self,
         start_date=None,
@@ -58,8 +77,79 @@ class USASpending:
                     filters.update({kwarg: v})
 
         response = requests.post(url=url, json={&#34;filters&#34;: filters})
+        LOGGER.debug(f&#34;Status code: {response.status_code}&#34;)
+        return response
 
-        return response</code></pre>
+    def bulk_download_status(self, file_name):
+        url = self.BASE_URL + f&#34;/api/v2/download/status/?file_name={file_name}&#34;
+        LOGGER.debug(f&#34;url: {url}&#34;)
+        return requests.get(url)
+
+    @LD
+    def awards(
+        self,
+        start_date=None,
+        end_date=None,
+        date_type=&#34;action_date&#34;,
+        agencies=[{&#34;toptier_name&#34;: &#34;Department of Energy&#34;}],
+        prime_award_types=[],
+        place_of_performance_locations=[],
+        place_of_performance_scope=None,
+        recipient_locations=None,
+        recipient_scope=None,
+        sub_award_types=None,
+        filters=None,
+        return_df=True,
+        file_destination=None,
+    ):
+
+        rqst = self.bulk_download_awards(
+            start_date=start_date,
+            end_date=end_date,
+            date_type=date_type,
+            agencies=agencies,
+            prime_award_types=prime_award_types,
+            place_of_performance_locations=place_of_performance_locations,
+            place_of_performance_scope=place_of_performance_scope,
+            recipient_locations=recipient_locations,
+            recipient_scope=recipient_scope,
+            sub_award_types=sub_award_types,
+            filters=filters,
+        )
+        data = json.loads(rqst.text)
+        file_name = data[&#34;file_name&#34;]
+        status = &#34;unfinished&#34;
+        attempts = 0
+        while status != &#34;finished&#34; and attempts &lt; 10:
+            dl_status = self.bulk_download_status(file_name=file_name)
+            data = json.loads(dl_status.text)
+            status = data[&#34;status&#34;]
+            attempts += 1
+
+        if status == &#34;finished&#34;:
+            file_url = data[&#34;file_url&#34;]
+            if return_df:
+
+                try:
+
+                    # ref: https://stackoverflow.com/a/39217788/4296857
+                    # ref: https://stackoverflow.com/a/46676405/4296857
+
+                    with requests.get(file_url, stream=True) as r:
+                        zf = ZipFile(BytesIO(r.content))
+                    match = [s for s in zf.namelist() if &#34;.csv&#34; in s][0]
+                    df = pd.read_csv(zf.open(match), low_memory=False)
+                    return df
+
+                except:
+                    LOGGER.error(&#34;Failed to return dataframe&#34;, exc_info=True)
+
+        if not return_df and not file_destination:
+            msg = &#34;Need to return a pandas dataframe or provide file location for download&#34;
+            LOGGER.error(msg)
+            raise ValueError(msg)
+
+        urlretrieve(file_url, file_destination)</code></pre>
 </details>
 </section>
 <section>
@@ -73,6 +163,7 @@ class USASpending:
 <dl>
 <dt id="usaspending_client.client.USASpending"><code class="flex name class">
 <span>class <span class="ident">USASpending</span></span>
+<span>(</span><span>verbosity=10)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -81,9 +172,11 @@ class USASpending:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">class USASpending:
-    def __init__(self):
+    def __init__(self, verbosity=10):
         self.BASE_URL = &#34;https://api.usaspending.gov&#34;
+        logging.basicConfig(stream=sys.stderr, level=verbosity, format=FORMAT)
 
+    @LD
     def bulk_download_awards(
         self,
         start_date=None,
@@ -109,11 +202,158 @@ class USASpending:
                     filters.update({kwarg: v})
 
         response = requests.post(url=url, json={&#34;filters&#34;: filters})
+        LOGGER.debug(f&#34;Status code: {response.status_code}&#34;)
+        return response
 
-        return response</code></pre>
+    def bulk_download_status(self, file_name):
+        url = self.BASE_URL + f&#34;/api/v2/download/status/?file_name={file_name}&#34;
+        LOGGER.debug(f&#34;url: {url}&#34;)
+        return requests.get(url)
+
+    @LD
+    def awards(
+        self,
+        start_date=None,
+        end_date=None,
+        date_type=&#34;action_date&#34;,
+        agencies=[{&#34;toptier_name&#34;: &#34;Department of Energy&#34;}],
+        prime_award_types=[],
+        place_of_performance_locations=[],
+        place_of_performance_scope=None,
+        recipient_locations=None,
+        recipient_scope=None,
+        sub_award_types=None,
+        filters=None,
+        return_df=True,
+        file_destination=None,
+    ):
+
+        rqst = self.bulk_download_awards(
+            start_date=start_date,
+            end_date=end_date,
+            date_type=date_type,
+            agencies=agencies,
+            prime_award_types=prime_award_types,
+            place_of_performance_locations=place_of_performance_locations,
+            place_of_performance_scope=place_of_performance_scope,
+            recipient_locations=recipient_locations,
+            recipient_scope=recipient_scope,
+            sub_award_types=sub_award_types,
+            filters=filters,
+        )
+        data = json.loads(rqst.text)
+        file_name = data[&#34;file_name&#34;]
+        status = &#34;unfinished&#34;
+        attempts = 0
+        while status != &#34;finished&#34; and attempts &lt; 10:
+            dl_status = self.bulk_download_status(file_name=file_name)
+            data = json.loads(dl_status.text)
+            status = data[&#34;status&#34;]
+            attempts += 1
+
+        if status == &#34;finished&#34;:
+            file_url = data[&#34;file_url&#34;]
+            if return_df:
+
+                try:
+
+                    # ref: https://stackoverflow.com/a/39217788/4296857
+                    # ref: https://stackoverflow.com/a/46676405/4296857
+
+                    with requests.get(file_url, stream=True) as r:
+                        zf = ZipFile(BytesIO(r.content))
+                    match = [s for s in zf.namelist() if &#34;.csv&#34; in s][0]
+                    df = pd.read_csv(zf.open(match), low_memory=False)
+                    return df
+
+                except:
+                    LOGGER.error(&#34;Failed to return dataframe&#34;, exc_info=True)
+
+        if not return_df and not file_destination:
+            msg = &#34;Need to return a pandas dataframe or provide file location for download&#34;
+            LOGGER.error(msg)
+            raise ValueError(msg)
+
+        urlretrieve(file_url, file_destination)</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
+<dt id="usaspending_client.client.USASpending.awards"><code class="name flex">
+<span>def <span class="ident">awards</span></span>(<span>self, start_date=None, end_date=None, date_type='action_date', agencies=[{'toptier_name': 'Department of Energy'}], prime_award_types=[], place_of_performance_locations=[], place_of_performance_scope=None, recipient_locations=None, recipient_scope=None, sub_award_types=None, filters=None, return_df=True, file_destination=None)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@LD
+def awards(
+    self,
+    start_date=None,
+    end_date=None,
+    date_type=&#34;action_date&#34;,
+    agencies=[{&#34;toptier_name&#34;: &#34;Department of Energy&#34;}],
+    prime_award_types=[],
+    place_of_performance_locations=[],
+    place_of_performance_scope=None,
+    recipient_locations=None,
+    recipient_scope=None,
+    sub_award_types=None,
+    filters=None,
+    return_df=True,
+    file_destination=None,
+):
+
+    rqst = self.bulk_download_awards(
+        start_date=start_date,
+        end_date=end_date,
+        date_type=date_type,
+        agencies=agencies,
+        prime_award_types=prime_award_types,
+        place_of_performance_locations=place_of_performance_locations,
+        place_of_performance_scope=place_of_performance_scope,
+        recipient_locations=recipient_locations,
+        recipient_scope=recipient_scope,
+        sub_award_types=sub_award_types,
+        filters=filters,
+    )
+    data = json.loads(rqst.text)
+    file_name = data[&#34;file_name&#34;]
+    status = &#34;unfinished&#34;
+    attempts = 0
+    while status != &#34;finished&#34; and attempts &lt; 10:
+        dl_status = self.bulk_download_status(file_name=file_name)
+        data = json.loads(dl_status.text)
+        status = data[&#34;status&#34;]
+        attempts += 1
+
+    if status == &#34;finished&#34;:
+        file_url = data[&#34;file_url&#34;]
+        if return_df:
+
+            try:
+
+                # ref: https://stackoverflow.com/a/39217788/4296857
+                # ref: https://stackoverflow.com/a/46676405/4296857
+
+                with requests.get(file_url, stream=True) as r:
+                    zf = ZipFile(BytesIO(r.content))
+                match = [s for s in zf.namelist() if &#34;.csv&#34; in s][0]
+                df = pd.read_csv(zf.open(match), low_memory=False)
+                return df
+
+            except:
+                LOGGER.error(&#34;Failed to return dataframe&#34;, exc_info=True)
+
+    if not return_df and not file_destination:
+        msg = &#34;Need to return a pandas dataframe or provide file location for download&#34;
+        LOGGER.error(msg)
+        raise ValueError(msg)
+
+    urlretrieve(file_url, file_destination)</code></pre>
+</details>
+</dd>
 <dt id="usaspending_client.client.USASpending.bulk_download_awards"><code class="name flex">
 <span>def <span class="ident">bulk_download_awards</span></span>(<span>self, start_date=None, end_date=None, date_type='action_date', agencies=[{'toptier_name': 'Department of Energy'}], prime_award_types=[], place_of_performance_locations=[], place_of_performance_scope=None, recipient_locations=None, recipient_scope=None, sub_award_types=None, filters=None)</span>
 </code></dt>
@@ -123,7 +363,8 @@ class USASpending:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def bulk_download_awards(
+<pre><code class="python">@LD
+def bulk_download_awards(
     self,
     start_date=None,
     end_date=None,
@@ -148,8 +389,23 @@ class USASpending:
                 filters.update({kwarg: v})
 
     response = requests.post(url=url, json={&#34;filters&#34;: filters})
-
+    LOGGER.debug(f&#34;Status code: {response.status_code}&#34;)
     return response</code></pre>
+</details>
+</dd>
+<dt id="usaspending_client.client.USASpending.bulk_download_status"><code class="name flex">
+<span>def <span class="ident">bulk_download_status</span></span>(<span>self, file_name)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def bulk_download_status(self, file_name):
+    url = self.BASE_URL + f&#34;/api/v2/download/status/?file_name={file_name}&#34;
+    LOGGER.debug(f&#34;url: {url}&#34;)
+    return requests.get(url)</code></pre>
 </details>
 </dd>
 </dl>
@@ -173,7 +429,9 @@ class USASpending:
 <li>
 <h4><code><a title="usaspending_client.client.USASpending" href="#usaspending_client.client.USASpending">USASpending</a></code></h4>
 <ul class="">
+<li><code><a title="usaspending_client.client.USASpending.awards" href="#usaspending_client.client.USASpending.awards">awards</a></code></li>
 <li><code><a title="usaspending_client.client.USASpending.bulk_download_awards" href="#usaspending_client.client.USASpending.bulk_download_awards">bulk_download_awards</a></code></li>
+<li><code><a title="usaspending_client.client.USASpending.bulk_download_status" href="#usaspending_client.client.USASpending.bulk_download_status">bulk_download_status</a></code></li>
 </ul>
 </li>
 </ul>
