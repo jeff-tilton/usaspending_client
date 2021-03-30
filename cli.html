@@ -28,15 +28,10 @@
 </summary>
 <pre><code class="python">import click
 
-from .data.make_dataset import make_data
-
 
 @click.group()
 def cli():
     pass
-
-
-cli.add_command(make_data)
 
 
 if __name__ == &#34;__main__&#34;:
