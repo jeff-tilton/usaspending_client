@@ -38,8 +38,77 @@ class USASpending:
         sub_award_types=None,
         filters=None,
     ):
+        """This method sends a request to the backend to begin generating a
+            zipfile of award data in CSV form for download.
+
+        Parameters
+        ----------
+        start_date : str
+            Required start date of time period.
+        end_date : str
+            Required end date of time period.
+        date_type : str (enum)
+            options:
+                - 'action_date'
+                - 'last_modified_date'
+        agencies : array[Agency]
+            Agency: obj
+                name: str
+                tier: enum[str]
+                    - 'toptier'
+                    - 'subtier'
+                type: enum[str]
+                    - 'funding'
+                    - 'awarding'
+                toptier_name: str
+                    Provided when the `name` belongs to a subtier agency.
+        prime_award_types : array[enum[string]]
+            options:
+                - IDV_A
+                - IDV_B
+                - IDV_B_A
+                - IDV_B_B
+                - IDV_B_C
+                - IDV_C
+                - IDV_D
+                - IDV_E
+                - 02
+                - 03
+                - 04
+                - 05
+                - 06
+                - 07
+                - 08
+                - 09
+                - 10
+                - 11
+                - A
+                - B
+                - C
+                - D
+        place_of_performance_locations : type
+            Description of parameter `place_of_performance_locations`.
+        place_of_performance_scope : type
+            Description of parameter `place_of_performance_scope`.
+        recipient_locations : type
+            Description of parameter `recipient_locations`.
+        recipient_scope : type
+            Description of parameter `recipient_scope`.
+        sub_award_types : type
+            Description of parameter `sub_award_types`.
+        filters : type
+            Description of parameter `filters`.
+
+        Returns
+        -------
+        type
+            Description of returned object.
+
+        """
         url = self.BASE_URL + "/api/v2/bulk_download/awards/"
 
+        start_date = pd.to_datetime(start_date).strftime("%Y-%m-%d")
+        end_date = pd.to_datetime(end_date).strftime("%Y-%m-%d")
         date_range = {"start_date": start_date, "end_date": end_date}
         if not filters:
             kwargs = locals()
@@ -74,6 +143,40 @@ class USASpending:
         return_df=True,
         file_destination=None,
     ):
+
+        """Short summary.
+
+        Parameters
+        ----------
+        start_date : type
+            Description of parameter `start_date`.
+        end_date : type
+            Description of parameter `end_date`.
+        date_type : type
+            Description of parameter `date_type`.
+        agencies : type
+            Description of parameter `agencies`.
+        prime_award_types : type
+            Description of parameter `prime_award_types`.
+        place_of_performance_locations : type
+            Description of parameter `place_of_performance_locations`.
+        place_of_performance_scope : type
+            Description of parameter `place_of_performance_scope`.
+        recipient_locations : type
+            Description of parameter `recipient_locations`.
+        recipient_scope : type
+            Description of parameter `recipient_scope`.
+        sub_award_types : type
+            Description of parameter `sub_award_types`.
+        filters : type
+            Description of parameter `filters`.
+
+        Returns
+        -------
+        type
+            Description of returned object.
+
+        """
 
         rqst = self.bulk_download_awards(
             start_date=start_date,
