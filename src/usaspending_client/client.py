@@ -2,9 +2,13 @@ import logging
 import sys
 import json
 
+from io import BytesIO
 from urllib.request import urlretrieve
+from urllib.request import urlopen
+import shutil
 import requests
 import pandas as pd
+from zipfile import ZipFile
 
 from .utils import log_decorator
 
@@ -97,8 +101,18 @@ class USASpending:
         if status == "finished":
             file_url = data["file_url"]
             if return_df:
+
                 try:
-                    return pd.read_csv(file_url)
+
+                    # ref: https://stackoverflow.com/a/39217788/4296857
+                    # ref: https://stackoverflow.com/a/46676405/4296857
+
+                    with requests.get(file_url, stream=True) as r:
+                        zf = ZipFile(BytesIO(r.content))
+                    match = [s for s in zf.namelist() if ".csv" in s][0]
+                    df = pd.read_csv(zf.open(match), low_memory=False)
+                    return df
+
                 except:
                     LOGGER.error("Failed to return dataframe", exc_info=True)
 
@@ -106,4 +120,5 @@ class USASpending:
             msg = "Need to return a pandas dataframe or provide file location for download"
             LOGGER.error(msg)
             raise ValueError(msg)
+
         urlretrieve(file_url, file_destination)
