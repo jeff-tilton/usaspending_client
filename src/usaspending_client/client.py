@@ -107,10 +107,10 @@ class USASpending:
         """
         url = self.BASE_URL + "/api/v2/bulk_download/awards/"
 
-        start_date = pd.to_datetime(start_date).strftime("%Y-%m-%d")
-        end_date = pd.to_datetime(end_date).strftime("%Y-%m-%d")
         date_range = {"start_date": start_date, "end_date": end_date}
         if not filters:
+            start_date = pd.to_datetime(start_date).strftime("%Y-%m-%d")
+            end_date = pd.to_datetime(end_date).strftime("%Y-%m-%d")
             kwargs = locals()
             filters = {}
             for kwarg, v in kwargs.items():
