@@ -85,6 +85,5 @@ class TestClient(object):
         data_tests,
     )
     def test_awards_to_df(self, filters, usa):
-
         df = usa.awards(filters=filters)
         assert not df.empty()
