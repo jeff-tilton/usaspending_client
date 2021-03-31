@@ -203,11 +203,12 @@ class USASpending:
             File name returned in a bulk_download response object
         &#34;&#34;&#34;
         url = self.BASE_URL + f&#34;/api/v2/download/status/?file_name={file_name}&#34;
-        LOGGER.debug(f&#34;url: {url}&#34;)
-        return requests.get(url)
+        response = requests.get(url)
+        LOGGER.debug(f&#34;Status code: {response.status_code}&#34;)
+        return response
 
     @LD
-    def awards(
+    def bulk_awards(
         self,
         start_date=None,
         end_date=None,
@@ -392,7 +393,13 @@ class USASpending:
             except:
                 LOGGER.error(&#34;Failed to return dataframe&#34;, exc_info=True)
 
-        urlretrieve(file_url, file_destination)</code></pre>
+        urlretrieve(file_url, file_destination)
+
+    def awards(self, award_id):
+        url = self.BASE_URL + f&#34;/api/v2/awards/{award_id}&#34;
+        response = requests.get(url)
+        LOGGER.debug(f&#34;Status code: {response.status_code}&#34;)
+        return response</code></pre>
 </details>
 </section>
 <section>
@@ -571,11 +578,12 @@ class USASpending:
             File name returned in a bulk_download response object
         &#34;&#34;&#34;
         url = self.BASE_URL + f&#34;/api/v2/download/status/?file_name={file_name}&#34;
-        LOGGER.debug(f&#34;url: {url}&#34;)
-        return requests.get(url)
+        response = requests.get(url)
+        LOGGER.debug(f&#34;Status code: {response.status_code}&#34;)
+        return response
 
     @LD
-    def awards(
+    def bulk_awards(
         self,
         start_date=None,
         end_date=None,
@@ -760,12 +768,34 @@ class USASpending:
             except:
                 LOGGER.error(&#34;Failed to return dataframe&#34;, exc_info=True)
 
-        urlretrieve(file_url, file_destination)</code></pre>
+        urlretrieve(file_url, file_destination)
+
+    def awards(self, award_id):
+        url = self.BASE_URL + f&#34;/api/v2/awards/{award_id}&#34;
+        response = requests.get(url)
+        LOGGER.debug(f&#34;Status code: {response.status_code}&#34;)
+        return response</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
 <dt id="usaspending_client.client.USASpending.awards"><code class="name flex">
-<span>def <span class="ident">awards</span></span>(<span>self, start_date=None, end_date=None, date_type='action_date', agencies=[{'toptier_name': 'Department of Energy'}], prime_award_types=[], place_of_performance_locations=[], place_of_performance_scope=None, recipient_locations=None, recipient_scope=None, sub_award_types=None, filters=None, return_df=True, file_destination=None, attempts=10)</span>
+<span>def <span class="ident">awards</span></span>(<span>self, award_id)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def awards(self, award_id):
+    url = self.BASE_URL + f&#34;/api/v2/awards/{award_id}&#34;
+    response = requests.get(url)
+    LOGGER.debug(f&#34;Status code: {response.status_code}&#34;)
+    return response</code></pre>
+</details>
+</dd>
+<dt id="usaspending_client.client.USASpending.bulk_awards"><code class="name flex">
+<span>def <span class="ident">bulk_awards</span></span>(<span>self, start_date=None, end_date=None, date_type='action_date', agencies=[{'toptier_name': 'Department of Energy'}], prime_award_types=[], place_of_performance_locations=[], place_of_performance_scope=None, recipient_locations=None, recipient_scope=None, sub_award_types=None, filters=None, return_df=True, file_destination=None, attempts=10)</span>
 </code></dt>
 <dd>
 <div class="desc"><p>This method sends a request to the backend to begin generating a
@@ -890,7 +920,7 @@ See <a href="https://github.com/fedspendingtransparency/usaspending-api/blob/mas
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@LD
-def awards(
+def bulk_awards(
     self,
     start_date=None,
     end_date=None,
@@ -1367,8 +1397,9 @@ or v2/bulk_download/transaction/ endpoint that same day.
         File name returned in a bulk_download response object
     &#34;&#34;&#34;
     url = self.BASE_URL + f&#34;/api/v2/download/status/?file_name={file_name}&#34;
-    LOGGER.debug(f&#34;url: {url}&#34;)
-    return requests.get(url)</code></pre>
+    response = requests.get(url)
+    LOGGER.debug(f&#34;Status code: {response.status_code}&#34;)
+    return response</code></pre>
 </details>
 </dd>
 </dl>
@@ -1393,6 +1424,7 @@ or v2/bulk_download/transaction/ endpoint that same day.
 <h4><code><a title="usaspending_client.client.USASpending" href="#usaspending_client.client.USASpending">USASpending</a></code></h4>
 <ul class="">
 <li><code><a title="usaspending_client.client.USASpending.awards" href="#usaspending_client.client.USASpending.awards">awards</a></code></li>
+<li><code><a title="usaspending_client.client.USASpending.bulk_awards" href="#usaspending_client.client.USASpending.bulk_awards">bulk_awards</a></code></li>
 <li><code><a title="usaspending_client.client.USASpending.bulk_download_awards" href="#usaspending_client.client.USASpending.bulk_download_awards">bulk_download_awards</a></code></li>
 <li><code><a title="usaspending_client.client.USASpending.bulk_download_status" href="#usaspending_client.client.USASpending.bulk_download_status">bulk_download_status</a></code></li>
 </ul>
