@@ -51,6 +51,13 @@ class USASpending:
         self.BASE_URL = &#34;https://api.usaspending.gov&#34;
         logging.basicConfig(stream=sys.stderr, level=verbosity, format=FORMAT)
 
+    @staticmethod
+    def _log_response_(response):
+        status = response.status_code
+        LOGGER.debug(f&#34;Status code: {response.status_code}&#34;)
+        if status != 200:
+            LOGGER.info(response.text)
+
     @LD
     def bulk_download_awards(
         self,
@@ -188,7 +195,7 @@ class USASpending:
                     filters.update({kwarg: v})
 
         response = requests.post(url=url, json={&#34;filters&#34;: filters})
-        LOGGER.debug(f&#34;Status code: {response.status_code}&#34;)
+        self._log_response_(response)
         return response
 
     def bulk_download_status(self, file_name):
@@ -204,7 +211,7 @@ class USASpending:
         &#34;&#34;&#34;
         url = self.BASE_URL + f&#34;/api/v2/download/status/?file_name={file_name}&#34;
         response = requests.get(url)
-        LOGGER.debug(f&#34;Status code: {response.status_code}&#34;)
+        self._log_response_(response)
         return response
 
     @LD
@@ -395,10 +402,11 @@ class USASpending:
 
         urlretrieve(file_url, file_destination)
 
+    @LD
     def awards(self, award_id):
         url = self.BASE_URL + f&#34;/api/v2/awards/{award_id}&#34;
         response = requests.get(url)
-        LOGGER.debug(f&#34;Status code: {response.status_code}&#34;)
+        self._log_response_(response)
         return response</code></pre>
 </details>
 </section>
@@ -426,6 +434,13 @@ class USASpending:
         self.BASE_URL = &#34;https://api.usaspending.gov&#34;
         logging.basicConfig(stream=sys.stderr, level=verbosity, format=FORMAT)
 
+    @staticmethod
+    def _log_response_(response):
+        status = response.status_code
+        LOGGER.debug(f&#34;Status code: {response.status_code}&#34;)
+        if status != 200:
+            LOGGER.info(response.text)
+
     @LD
     def bulk_download_awards(
         self,
@@ -563,7 +578,7 @@ class USASpending:
                     filters.update({kwarg: v})
 
         response = requests.post(url=url, json={&#34;filters&#34;: filters})
-        LOGGER.debug(f&#34;Status code: {response.status_code}&#34;)
+        self._log_response_(response)
         return response
 
     def bulk_download_status(self, file_name):
@@ -579,7 +594,7 @@ class USASpending:
         &#34;&#34;&#34;
         url = self.BASE_URL + f&#34;/api/v2/download/status/?file_name={file_name}&#34;
         response = requests.get(url)
-        LOGGER.debug(f&#34;Status code: {response.status_code}&#34;)
+        self._log_response_(response)
         return response
 
     @LD
@@ -770,10 +785,11 @@ class USASpending:
 
         urlretrieve(file_url, file_destination)
 
+    @LD
     def awards(self, award_id):
         url = self.BASE_URL + f&#34;/api/v2/awards/{award_id}&#34;
         response = requests.get(url)
-        LOGGER.debug(f&#34;Status code: {response.status_code}&#34;)
+        self._log_response_(response)
         return response</code></pre>
 </details>
 <h3>Methods</h3>
@@ -787,10 +803,11 @@ class USASpending:
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def awards(self, award_id):
+<pre><code class="python">@LD
+def awards(self, award_id):
     url = self.BASE_URL + f&#34;/api/v2/awards/{award_id}&#34;
     response = requests.get(url)
-    LOGGER.debug(f&#34;Status code: {response.status_code}&#34;)
+    self._log_response_(response)
     return response</code></pre>
 </details>
 </dd>
@@ -1364,7 +1381,7 @@ def bulk_download_awards(
                 filters.update({kwarg: v})
 
     response = requests.post(url=url, json={&#34;filters&#34;: filters})
-    LOGGER.debug(f&#34;Status code: {response.status_code}&#34;)
+    self._log_response_(response)
     return response</code></pre>
 </details>
 </dd>
@@ -1398,7 +1415,7 @@ or v2/bulk_download/transaction/ endpoint that same day.
     &#34;&#34;&#34;
     url = self.BASE_URL + f&#34;/api/v2/download/status/?file_name={file_name}&#34;
     response = requests.get(url)
-    LOGGER.debug(f&#34;Status code: {response.status_code}&#34;)
+    self._log_response_(response)
     return response</code></pre>
 </details>
 </dd>
