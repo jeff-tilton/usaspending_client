@@ -39,7 +39,7 @@ class USASpending:
         filters=None,
     ):
         """This method sends a request to the backend to begin generating a
-            zipfile of award data in CSV form for download.
+            zipfile of award data in CSV form for download.  [Full documentation for endpoint](https://github.com/fedspendingtransparency/usaspending-api/blob/master/usaspending_api/api_contracts/contracts/v2/bulk_download/awards.md).
 
         Parameters
         ----------
@@ -47,70 +47,112 @@ class USASpending:
             Required start date of time period.
         end_date : str
             Required end date of time period.
-        date_type : str (enum)
-            options:
-                - 'action_date'
-                - 'last_modified_date'
+        date_type : enum[str]
+            - `'domestic'`
+            - `'foreign'`
         agencies : array[Agency]
-            Agency: obj
-                name: str
-                tier: enum[str]
-                    - 'toptier'
-                    - 'subtier'
-                type: enum[str]
-                    - 'funding'
-                    - 'awarding'
-                toptier_name: str
-                    Provided when the `name` belongs to a subtier agency.
+
+
         prime_award_types : array[enum[string]]
-            options:
-                - IDV_A
-                - IDV_B
-                - IDV_B_A
-                - IDV_B_B
-                - IDV_B_C
-                - IDV_C
-                - IDV_D
-                - IDV_E
-                - 02
-                - 03
-                - 04
-                - 05
-                - 06
-                - 07
-                - 08
-                - 09
-                - 10
-                - 11
-                - A
-                - B
-                - C
-                - D
-        place_of_performance_locations : type
-            Description of parameter `place_of_performance_locations`.
-        place_of_performance_scope : type
-            Description of parameter `place_of_performance_scope`.
-        recipient_locations : type
-            Description of parameter `recipient_locations`.
-        recipient_scope : type
-            Description of parameter `recipient_scope`.
-        sub_award_types : type
-            Description of parameter `sub_award_types`.
-        filters : type
-            Description of parameter `filters`.
+
+            - `'IDV_A'`
+            - `'IDV_B'`
+            - `'IDV_B_A'`
+            - `'IDV_B_B'`
+            - `'IDV_B_C'`
+            - `'IDV_C'`
+            - `'IDV_D'`
+            - `'IDV_E'`
+            - `'02'`
+            - `'03'`
+            - `'04'`
+            - `'05'`
+            - `'06'`
+            - `'07'`
+            - `'08'`
+            - `'09'`
+            - `'10'`
+            - `'11'`
+            - `'A'`
+            - `'B'`
+            - `'C'`
+            - `'D'`
+
+        place_of_performance_locations : array[Location]
+
+        place_of_performance_scope : enum[string]
+
+            - `'domestic'`
+            - `'foreign'`
+
+
+
+        recipient_locations : array[Location]
+
+        recipient_scope : enum[string]
+
+            - `'domestic'`
+            - `'foreign'`
+
+
+        sub_award_types : array[enum[string]]
+
+            - `'grant`'
+            - `'procurement'`
+
+        filters : object
+            A fully built python dictionary with all filters, bypassing all other arguments.
+            See [endpoint documentation](https://github.com/fedspendingtransparency/usaspending-api/blob/master/usaspending_api/api_contracts/contracts/v2/bulk_download/awards.md) for an example.
+
+
+        ## Agency: object
+
+        - name: str
+        - tier: enum[str]
+
+            -- `'toptier'`
+
+            -- `'subtier'`
+
+        - type: enum[str]
+
+            -- `'funding'`
+
+            -- `'awarding`'
+
+        ## Location: object
+
+        - `'country`': str
+        - `'state`': str
+        - `'county`': str
+        - `'city`': str
+        - `'district`': str
+        - `'zip`': str
 
         Returns
         -------
-        type
-            Description of returned object.
+        request.response
+            Response from the USASpending /api/v2/bulk_download/awards/ endpoint.
 
+        Examples
+        -------
+
+        ```python
+        >>> #using arguments
+        >>> from usaspending_client import USASpending
+        >>> usa = USASpending()
+        >>> response = usa.bulk_download_awards(start_date="2019-10-01", end_date="2020-09-30", prime_award_types=["A"])
+        >>> #using filters object
+        >>> filters = {"prime_award_types": ["A"],"sub_award_types": [],"date_type": "action_date","date_range": {"start_date": "2019-10-01","end_date": "2020-09-30"},"agencies": [{"type": "funding","tier": "subtier","name": "Animal and Plant Health Inspection Service","toptier_name": "Department of Agriculture"}]}
+        >>> response = usa.bulk_download_awards(filters=filters)
+        ```
         """
         url = self.BASE_URL + "/api/v2/bulk_download/awards/"
 
-        date_range = {"start_date": start_date, "end_date": end_date}
         if not filters:
             start_date = pd.to_datetime(start_date).strftime("%Y-%m-%d")
             end_date = pd.to_datetime(end_date).strftime("%Y-%m-%d")
+            date_range = {"start_date": start_date, "end_date": end_date}
             kwargs = locals()
             filters = {}
             for kwarg, v in kwargs.items():
@@ -122,6 +164,16 @@ class USASpending:
         return response
 
     def bulk_download_status(self, file_name):
+        """This method returns the current status of a download job
+         that has been requested with the v2/bulk_download/awards/
+         or v2/bulk_download/transaction/ endpoint that same day.
+         [Full documentation for endpoint](https://github.com/fedspendingtransparency/usaspending-api/blob/master/usaspending_api/api_contracts/contracts/v2/download/status.md).
+
+        Parameters
+        ----------
+        file_name : str
+            File name returned in a bulk_download response object
+        """
         url = self.BASE_URL + f"/api/v2/download/status/?file_name={file_name}"
         LOGGER.debug(f"url: {url}")
         return requests.get(url)
@@ -142,41 +194,130 @@ class USASpending:
         filters=None,
         return_df=True,
         file_destination=None,
+        attempts=10,
     ):
 
-        """Short summary.
+        """This method sends a request to the backend to begin generating a
+            zipfile of award data in CSV form for download.  [Full documentation for endpoint](https://github.com/fedspendingtransparency/usaspending-api/blob/master/usaspending_api/api_contracts/contracts/v2/bulk_download/awards.md).
 
         Parameters
         ----------
-        start_date : type
-            Description of parameter `start_date`.
-        end_date : type
-            Description of parameter `end_date`.
-        date_type : type
-            Description of parameter `date_type`.
-        agencies : type
-            Description of parameter `agencies`.
-        prime_award_types : type
-            Description of parameter `prime_award_types`.
-        place_of_performance_locations : type
-            Description of parameter `place_of_performance_locations`.
-        place_of_performance_scope : type
-            Description of parameter `place_of_performance_scope`.
-        recipient_locations : type
-            Description of parameter `recipient_locations`.
-        recipient_scope : type
-            Description of parameter `recipient_scope`.
-        sub_award_types : type
-            Description of parameter `sub_award_types`.
-        filters : type
-            Description of parameter `filters`.
+        start_date : str
+            Required start date of time period.
+        end_date : str
+            Required end date of time period.
+        date_type : enum[str]
+            - `'domestic'`
+            - `'foreign'`
+        agencies : array[Agency]
+
+
+        prime_award_types : array[enum[string]]
+
+            - `'IDV_A'`
+            - `'IDV_B'`
+            - `'IDV_B_A'`
+            - `'IDV_B_B'`
+            - `'IDV_B_C'`
+            - `'IDV_C'`
+            - `'IDV_D'`
+            - `'IDV_E'`
+            - `'02'`
+            - `'03'`
+            - `'04'`
+            - `'05'`
+            - `'06'`
+            - `'07'`
+            - `'08'`
+            - `'09'`
+            - `'10'`
+            - `'11'`
+            - `'A'`
+            - `'B'`
+            - `'C'`
+            - `'D'`
+
+        place_of_performance_locations : array[Location]
+
+        place_of_performance_scope : enum[string]
+
+            - `'domestic'`
+            - `'foreign'`
+
+
+
+        recipient_locations : array[Location]
+
+        recipient_scope : enum[string]
+
+            - `'domestic'`
+            - `'foreign'`
+
+
+        sub_award_types : array[enum[string]]
+
+            - `'grant`'
+            - `'procurement'`
+
+        filters : object
+            A fully built python dictionary with all filters, bypassing all other arguments.
+            See [endpoint documentation](https://github.com/fedspendingtransparency/usaspending-api/blob/master/usaspending_api/api_contracts/contracts/v2/bulk_download/awards.md) for an example.
+
+        return_df: bool
+            Return a pandas dataframe
+
+        file_destination: str
+            If not a pandas dataframe, filelocation to store zipped csv's
+
+        attempts: int
+            Number of times to check if bulk download has completed.
+
+        ## Agency: object
+
+        - name: str
+        - tier: enum[str]
+
+            -- `'toptier'`
+
+            -- `'subtier'`
+
+        - type: enum[str]
+
+            -- `'funding'`
+
+            -- `'awarding`'
+
+        ## Location: object
+
+        - `'country`': str
+        - `'state`': str
+        - `'county`': str
+        - `'city`': str
+        - `'district`': str
+        - `'zip`': str
 
         Returns
         -------
-        type
-            Description of returned object.
+        pd.DataFrame or zip file
+             Final response from the USASpending /api/v2/bulk_download/awards/ endpoint.
 
+        Examples
+        -------
+
+        ```python
+        >>> #using arguments
+        >>> from usaspending_client import USASpending
+        >>> usa = USASpending()
+        >>> df = usa.awards(start_date="2019-10-01", end_date="2020-09-30", prime_award_types=["A"])
+        >>> #using filters object
+        >>> filters = {"prime_award_types": ["A"],"sub_award_types": [],"date_type": "action_date","date_range": {"start_date": "2019-10-01","end_date": "2020-09-30"},"agencies": [{"type": "funding","tier": "subtier","name": "Animal and Plant Health Inspection Service","toptier_name": "Department of Agriculture"}]}
+        >>> df = usa.awards(filters=filters)
+        ```
         """
+
+        if not return_df and not file_destination:
+            msg = "Need to return a pandas dataframe or provide file location for download"
+            raise ValueError(msg)
 
         rqst = self.bulk_download_awards(
             start_date=start_date,
@@ -191,37 +332,36 @@ class USASpending:
             sub_award_types=sub_award_types,
             filters=filters,
         )
+
         data = json.loads(rqst.text)
         file_name = data["file_name"]
-        status = "unfinished"
-        attempts = 0
-        while status != "finished" and attempts < 10:
+        status = None
+        runs = 0
+        while status != "finished" and runs < attempts:
             dl_status = self.bulk_download_status(file_name=file_name)
             data = json.loads(dl_status.text)
             status = data["status"]
-            attempts += 1
+            runs += 1
 
-        if status == "finished":
+        try:
             file_url = data["file_url"]
-            if return_df:
+        except KeyError:
+            raise KeyError(f"Bulk download did not finish in {attepts} attempts.")
 
-                try:
+        if return_df:
 
-                    # ref: https://stackoverflow.com/a/39217788/4296857
-                    # ref: https://stackoverflow.com/a/46676405/4296857
+            try:
 
-                    with requests.get(file_url, stream=True) as r:
-                        zf = ZipFile(BytesIO(r.content))
-                    match = [s for s in zf.namelist() if ".csv" in s][0]
-                    df = pd.read_csv(zf.open(match), low_memory=False)
-                    return df
+                # ref: https://stackoverflow.com/a/39217788/4296857
+                # ref: https://stackoverflow.com/a/46676405/4296857
 
-                except:
-                    LOGGER.error("Failed to return dataframe", exc_info=True)
+                with requests.get(file_url, stream=True) as r:
+                    zf = ZipFile(BytesIO(r.content))
+                match = [s for s in zf.namelist() if ".csv" in s][0]
+                df = pd.read_csv(zf.open(match), low_memory=False)
+                return df
 
-        if not return_df and not file_destination:
-            msg = "Need to return a pandas dataframe or provide file location for download"
-            LOGGER.error(msg)
-            raise ValueError(msg)
+            except:
+                LOGGER.error("Failed to return dataframe", exc_info=True)
 
         urlretrieve(file_url, file_destination)
