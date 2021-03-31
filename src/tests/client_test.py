@@ -1,5 +1,5 @@
 import json
-
+import logging
 import pytest
 
 from usaspending_client import USASpending
@@ -55,12 +55,30 @@ data_tests = [
 
 
 class TestClient(object):
+    @pytest.fixture(autouse=True)
+    def inject_fixtures(self, caplog):
+        # https://stackoverflow.com/a/50375022/4296857
+        self._caplog = caplog
+
     @pytest.mark.parametrize(
         "filters",
         data_tests,
     )
     def test_bulk_download_awards_using_filters_object_200_response(self, filters, usa):
         assert usa.bulk_download_awards(filters=filters).status_code == 200
+
+    def test_bulk_download_awards_using_filters_object_400_response(self, usa):
+        assert (
+            usa.bulk_download_awards(
+                start_date="2019-10-01", end_date="2020-09-30"
+            ).status_code
+            == 400
+        )
+        with self._caplog.at_level(30):
+            assert (
+                "Missing one or more required body parameters: prime_award_types or sub_award_types"
+                in self._caplog.records[-2].message
+            )
 
     def test_bulk_download_awards_using_arguments_200_response(self, usa):
 
