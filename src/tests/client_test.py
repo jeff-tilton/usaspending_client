@@ -59,25 +59,28 @@ class TestClient(object):
         "filters",
         data_tests,
     )
-    def test_bulk_download_awards_200_response(self, filters, usa):
+    def test_bulk_download_awards_using_filters_object_200_response(self, filters, usa):
         assert usa.bulk_download_awards(filters=filters).status_code == 200
+
+    def test_bulk_download_awards_using_arguments_200_response(self, usa):
+
+        response = usa.bulk_download_awards(
+            start_date="2019-10-01", end_date="2020-09-30", prime_award_types=["A"]
+        )
+        if response.status_code != 200:
+            print(response.text)
+        assert response.status_code == 200
 
     @pytest.mark.parametrize(
         "filters",
         data_tests,
     )
     def test_bulk_download_status_200_response(self, filters, usa):
-
         response = usa.bulk_download_awards(filters=filters)
-
         assert response.status_code == 200
-
         data = json.loads(response.text)
-
         file_name = data["file_name"]
-
         response = usa.bulk_download_status(file_name=file_name)
-
         assert response.status_code == 200
 
     @pytest.mark.parametrize(
