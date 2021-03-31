@@ -28,7 +28,7 @@ class USASpending:
         status = response.status_code
         LOGGER.debug(f"Status code: {response.status_code}")
         if status != 200:
-            LOGGER.info(response.text)
+            LOGGER.warning(response.text)
 
     @LD
     def bulk_download_awards(
