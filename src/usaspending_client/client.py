@@ -23,6 +23,13 @@ class USASpending:
         self.BASE_URL = "https://api.usaspending.gov"
         logging.basicConfig(stream=sys.stderr, level=verbosity, format=FORMAT)
 
+    @staticmethod
+    def _log_response_(response):
+        status = response.status_code
+        LOGGER.debug(f"Status code: {response.status_code}")
+        if status != 200:
+            LOGGER.info(response.text)
+
     @LD
     def bulk_download_awards(
         self,
@@ -160,7 +167,7 @@ class USASpending:
                     filters.update({kwarg: v})
 
         response = requests.post(url=url, json={"filters": filters})
-        LOGGER.debug(f"Status code: {response.status_code}")
+        self._log_response_(response)
         return response
 
     def bulk_download_status(self, file_name):
@@ -176,7 +183,7 @@ class USASpending:
         """
         url = self.BASE_URL + f"/api/v2/download/status/?file_name={file_name}"
         response = requests.get(url)
-        LOGGER.debug(f"Status code: {response.status_code}")
+        self._log_response_(response)
         return response
 
     @LD
@@ -367,8 +374,9 @@ class USASpending:
 
         urlretrieve(file_url, file_destination)
 
+    @LD
     def awards(self, award_id):
         url = self.BASE_URL + f"/api/v2/awards/{award_id}"
         response = requests.get(url)
-        LOGGER.debug(f"Status code: {response.status_code}")
+        self._log_response_(response)
         return response
