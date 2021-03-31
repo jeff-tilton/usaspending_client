@@ -346,7 +346,7 @@ class USASpending:
         try:
             file_url = data["file_url"]
         except KeyError:
-            raise KeyError(f"Bulk download did not finish in {attepts} attempts.")
+            raise KeyError(f"Bulk download did not finish in {attempts} attempts.")
 
         if return_df:
 
