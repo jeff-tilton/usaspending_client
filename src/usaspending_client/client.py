@@ -175,11 +175,12 @@ class USASpending:
             File name returned in a bulk_download response object
         """
         url = self.BASE_URL + f"/api/v2/download/status/?file_name={file_name}"
-        LOGGER.debug(f"url: {url}")
-        return requests.get(url)
+        response = requests.get(url)
+        LOGGER.debug(f"Status code: {response.status_code}")
+        return response
 
     @LD
-    def awards(
+    def bulk_awards(
         self,
         start_date=None,
         end_date=None,
@@ -365,3 +366,9 @@ class USASpending:
                 LOGGER.error("Failed to return dataframe", exc_info=True)
 
         urlretrieve(file_url, file_destination)
+
+    def awards(self, award_id):
+        url = self.BASE_URL + f"/api/v2/awards/{award_id}"
+        response = requests.get(url)
+        LOGGER.debug(f"Status code: {response.status_code}")
+        return response

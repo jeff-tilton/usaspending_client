@@ -87,6 +87,10 @@ class TestClient(object):
         "filters",
         data_tests,
     )
-    def test_awards_to_df(self, filters, usa):
-        df = usa.awards(filters=filters)
+    def test_bulk_awards_to_df(self, filters, usa):
+        df = usa.bulk_awards(filters=filters)
         assert not df.empty
+
+    def test_awards_200_response(self, usa):
+        response = usa.awards(award_id="CONT_AWD_12639519P0311_12K3_-NONE-_-NONE-")
+        assert response.status_code == 200
