@@ -457,10 +457,14 @@ class USASpending:
         &#34;&#34;&#34;
         result = []
         for award_id in award_ids:
+
             try:
                 response = self.awards(award_id=award_id, return_json=return_json)
             except:
                 LOGGER.error(f&#34;Error requesting award id: {award_id}&#34;)
+
+            result.append(response)
+
         return result
 
     @LD
@@ -919,10 +923,14 @@ class USASpending:
         &#34;&#34;&#34;
         result = []
         for award_id in award_ids:
+
             try:
                 response = self.awards(award_id=award_id, return_json=return_json)
             except:
                 LOGGER.error(f&#34;Error requesting award id: {award_id}&#34;)
+
+            result.append(response)
+
         return result
 
     @LD
@@ -1121,10 +1129,14 @@ def awards_list(self, award_ids, return_json=False):
     &#34;&#34;&#34;
     result = []
     for award_id in award_ids:
+
         try:
             response = self.awards(award_id=award_id, return_json=return_json)
         except:
             LOGGER.error(f&#34;Error requesting award id: {award_id}&#34;)
+
+        result.append(response)
+
     return result</code></pre>
 </details>
 </dd>
