@@ -41,7 +41,28 @@ def log_decorator(logger, level=10):
 
         return wrapper
 
-    return real_decorator</code></pre>
+    return real_decorator
+
+
+def flatten_dict(nested_dictionary):
+    &#34;Flattens a nested dictionary&#34;
+    res = {}
+
+    def get_all_values(nested_dictionary, parent_key):
+        # ref: https://www.kite.com/python/answers/how-to-loop-through-all-nested-dictionary-values-using-a-for-loop-in-python
+        for key, value in nested_dictionary.items():
+            if type(value) is dict:
+                if parent_key:
+                    k = f&#34;{parent_key}__{key}&#34;
+                else:
+                    k = key
+                get_all_values(value, parent_key=k)
+            else:
+                k = f&#34;{parent_key}__{key}&#34;
+                res.update({k: value})
+
+    get_all_values(nested_dictionary=nested_dictionary, parent_key=&#34;&#34;)
+    return res</code></pre>
 </details>
 </section>
 <section>
@@ -51,6 +72,36 @@ def log_decorator(logger, level=10):
 <section>
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
+<dt id="usaspending_client.utils.flatten_dict"><code class="name flex">
+<span>def <span class="ident">flatten_dict</span></span>(<span>nested_dictionary)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>Flattens a nested dictionary</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">def flatten_dict(nested_dictionary):
+    &#34;Flattens a nested dictionary&#34;
+    res = {}
+
+    def get_all_values(nested_dictionary, parent_key):
+        # ref: https://www.kite.com/python/answers/how-to-loop-through-all-nested-dictionary-values-using-a-for-loop-in-python
+        for key, value in nested_dictionary.items():
+            if type(value) is dict:
+                if parent_key:
+                    k = f&#34;{parent_key}__{key}&#34;
+                else:
+                    k = key
+                get_all_values(value, parent_key=k)
+            else:
+                k = f&#34;{parent_key}__{key}&#34;
+                res.update({k: value})
+
+    get_all_values(nested_dictionary=nested_dictionary, parent_key=&#34;&#34;)
+    return res</code></pre>
+</details>
+</dd>
 <dt id="usaspending_client.utils.log_decorator"><code class="name flex">
 <span>def <span class="ident">log_decorator</span></span>(<span>logger, level=10)</span>
 </code></dt>
@@ -93,6 +144,7 @@ def log_decorator(logger, level=10):
 </li>
 <li><h3><a href="#header-functions">Functions</a></h3>
 <ul class="">
+<li><code><a title="usaspending_client.utils.flatten_dict" href="#usaspending_client.utils.flatten_dict">flatten_dict</a></code></li>
 <li><code><a title="usaspending_client.utils.log_decorator" href="#usaspending_client.utils.log_decorator">log_decorator</a></code></li>
 </ul>
 </li>

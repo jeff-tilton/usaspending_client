@@ -39,6 +39,7 @@ import pandas as pd
 from zipfile import ZipFile
 
 from .utils import log_decorator
+from .utils import flatten_dict
 
 
 LOGGER = logging.getLogger(__name__)
@@ -56,7 +57,7 @@ class USASpending:
         status = response.status_code
         LOGGER.debug(f&#34;Status code: {response.status_code}&#34;)
         if status != 200:
-            LOGGER.info(response.text)
+            LOGGER.warning(response.text)
 
     @LD
     def bulk_download_awards(
@@ -381,6 +382,7 @@ class USASpending:
 
         try:
             file_url = data[&#34;file_url&#34;]
+            LOGGER.debug(file_url)
         except KeyError:
             raise KeyError(f&#34;Bulk download did not finish in {attempts} attempts.&#34;)
 
@@ -403,11 +405,30 @@ class USASpending:
         urlretrieve(file_url, file_destination)
 
     @LD
-    def awards(self, award_id):
+    def awards(self, award_id, return_json=False):
         url = self.BASE_URL + f&#34;/api/v2/awards/{award_id}&#34;
         response = requests.get(url)
         self._log_response_(response)
-        return response</code></pre>
+        if return_json:
+            response = json.loads(response.text)
+        return response
+
+    @LD
+    def awards_list(self, award_ids, return_json=False):
+        result = []
+        for award_id in award_ids:
+            try:
+                response = self.awards(award_id=award_id, return_json=return_json)
+            except:
+                LOGGER.error(f&#34;Error requesting award id: {award_id}&#34;)
+        return result
+
+    @LD
+    def awards_df(self, award_ids):
+        awards = self.awards_list(award_ids, return_json=True)
+        flattened_awards = [flatten_dict(award) for award in awards]
+        df = pd.DataFrame(awards)
+        return df</code></pre>
 </details>
 </section>
 <section>
@@ -439,7 +460,7 @@ class USASpending:
         status = response.status_code
         LOGGER.debug(f&#34;Status code: {response.status_code}&#34;)
         if status != 200:
-            LOGGER.info(response.text)
+            LOGGER.warning(response.text)
 
     @LD
     def bulk_download_awards(
@@ -764,6 +785,7 @@ class USASpending:
 
         try:
             file_url = data[&#34;file_url&#34;]
+            LOGGER.debug(file_url)
         except KeyError:
             raise KeyError(f&#34;Bulk download did not finish in {attempts} attempts.&#34;)
 
@@ -786,16 +808,35 @@ class USASpending:
         urlretrieve(file_url, file_destination)
 
     @LD
-    def awards(self, award_id):
+    def awards(self, award_id, return_json=False):
         url = self.BASE_URL + f&#34;/api/v2/awards/{award_id}&#34;
         response = requests.get(url)
         self._log_response_(response)
-        return response</code></pre>
+        if return_json:
+            response = json.loads(response.text)
+        return response
+
+    @LD
+    def awards_list(self, award_ids, return_json=False):
+        result = []
+        for award_id in award_ids:
+            try:
+                response = self.awards(award_id=award_id, return_json=return_json)
+            except:
+                LOGGER.error(f&#34;Error requesting award id: {award_id}&#34;)
+        return result
+
+    @LD
+    def awards_df(self, award_ids):
+        awards = self.awards_list(award_ids, return_json=True)
+        flattened_awards = [flatten_dict(award) for award in awards]
+        df = pd.DataFrame(awards)
+        return df</code></pre>
 </details>
 <h3>Methods</h3>
 <dl>
 <dt id="usaspending_client.client.USASpending.awards"><code class="name flex">
-<span>def <span class="ident">awards</span></span>(<span>self, award_id)</span>
+<span>def <span class="ident">awards</span></span>(<span>self, award_id, return_json=False)</span>
 </code></dt>
 <dd>
 <div class="desc"></div>
@@ -804,11 +845,50 @@ class USASpending:
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@LD
-def awards(self, award_id):
+def awards(self, award_id, return_json=False):
     url = self.BASE_URL + f&#34;/api/v2/awards/{award_id}&#34;
     response = requests.get(url)
     self._log_response_(response)
+    if return_json:
+        response = json.loads(response.text)
     return response</code></pre>
+</details>
+</dd>
+<dt id="usaspending_client.client.USASpending.awards_df"><code class="name flex">
+<span>def <span class="ident">awards_df</span></span>(<span>self, award_ids)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@LD
+def awards_df(self, award_ids):
+    awards = self.awards_list(award_ids, return_json=True)
+    flattened_awards = [flatten_dict(award) for award in awards]
+    df = pd.DataFrame(awards)
+    return df</code></pre>
+</details>
+</dd>
+<dt id="usaspending_client.client.USASpending.awards_list"><code class="name flex">
+<span>def <span class="ident">awards_list</span></span>(<span>self, award_ids, return_json=False)</span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@LD
+def awards_list(self, award_ids, return_json=False):
+    result = []
+    for award_id in award_ids:
+        try:
+            response = self.awards(award_id=award_id, return_json=return_json)
+        except:
+            LOGGER.error(f&#34;Error requesting award id: {award_id}&#34;)
+    return result</code></pre>
 </details>
 </dd>
 <dt id="usaspending_client.client.USASpending.bulk_awards"><code class="name flex">
@@ -1103,6 +1183,7 @@ def bulk_awards(
 
     try:
         file_url = data[&#34;file_url&#34;]
+        LOGGER.debug(file_url)
     except KeyError:
         raise KeyError(f&#34;Bulk download did not finish in {attempts} attempts.&#34;)
 
@@ -1441,6 +1522,8 @@ or v2/bulk_download/transaction/ endpoint that same day.
 <h4><code><a title="usaspending_client.client.USASpending" href="#usaspending_client.client.USASpending">USASpending</a></code></h4>
 <ul class="">
 <li><code><a title="usaspending_client.client.USASpending.awards" href="#usaspending_client.client.USASpending.awards">awards</a></code></li>
+<li><code><a title="usaspending_client.client.USASpending.awards_df" href="#usaspending_client.client.USASpending.awards_df">awards_df</a></code></li>
+<li><code><a title="usaspending_client.client.USASpending.awards_list" href="#usaspending_client.client.USASpending.awards_list">awards_list</a></code></li>
 <li><code><a title="usaspending_client.client.USASpending.bulk_awards" href="#usaspending_client.client.USASpending.bulk_awards">bulk_awards</a></code></li>
 <li><code><a title="usaspending_client.client.USASpending.bulk_download_awards" href="#usaspending_client.client.USASpending.bulk_download_awards">bulk_download_awards</a></code></li>
 <li><code><a title="usaspending_client.client.USASpending.bulk_download_status" href="#usaspending_client.client.USASpending.bulk_download_status">bulk_download_status</a></code></li>
