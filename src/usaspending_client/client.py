@@ -11,6 +11,7 @@ import pandas as pd
 from zipfile import ZipFile
 
 from .utils import log_decorator
+from .utils import flatten_dict
 
 
 LOGGER = logging.getLogger(__name__)
@@ -375,8 +376,27 @@ class USASpending:
         urlretrieve(file_url, file_destination)
 
     @LD
-    def awards(self, award_id):
+    def awards(self, award_id, return_json=False):
         url = self.BASE_URL + f"/api/v2/awards/{award_id}"
         response = requests.get(url)
         self._log_response_(response)
+        if return_json:
+            response = json.loads(response.text)
         return response
+
+    @LD
+    def awards_list(self, award_ids, return_json=False):
+        result = []
+        for award_id in award_ids:
+            try:
+                response = self.awards(award_id=award_id, return_json=return_json)
+            except:
+                LOGGER.error(f"Error requesting award id: {award_id}")
+        return result
+
+    @LD
+    def awards_df(self, award_ids):
+        awards = self.awards_list(award_ids, return_json=True)
+        flattened_awards = [flatten_dict(award) for award in awards]
+        df = pd.DataFrame(awards)
+        return df
