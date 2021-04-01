@@ -93,8 +93,6 @@ class USASpending:
             - `'domestic'`
             - `'foreign'`
 
-
-
         recipient_locations : array[Location]
 
         recipient_scope : enum[string]
@@ -102,10 +100,9 @@ class USASpending:
             - `'domestic'`
             - `'foreign'`
 
-
         sub_award_types : array[enum[string]]
 
-            - `'grant`'
+            - `'grant'`
             - `'procurement'`
 
         filters : object
@@ -126,16 +123,16 @@ class USASpending:
 
             -- `'funding'`
 
-            -- `'awarding`'
+            -- `'awarding'`
 
         ## Location: object
 
-        - `'country`': str
-        - `'state`': str
-        - `'county`': str
-        - `'city`': str
-        - `'district`': str
-        - `'zip`': str
+        - `'country'`: str
+        - `'state'`: str
+        - `'county'`: str
+        - `'city'`: str
+        - `'district'`: str
+        - `'zip'`: str
 
         Returns
         -------
@@ -265,7 +262,7 @@ class USASpending:
 
         sub_award_types : array[enum[string]]
 
-            - `'grant`'
+            - `'grant'`
             - `'procurement'`
 
         filters : object
@@ -294,16 +291,16 @@ class USASpending:
 
             -- `'funding'`
 
-            -- `'awarding`'
+            -- `'awarding'`
 
         ## Location: object
 
-        - `'country`': str
-        - `'state`': str
-        - `'county`': str
-        - `'city`': str
-        - `'district`': str
-        - `'zip`': str
+        - `'country'`: str
+        - `'state'`: str
+        - `'county'`: str
+        - `'city'`: str
+        - `'district'`: str
+        - `'zip'`: str
 
         Returns
         -------
