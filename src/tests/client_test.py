@@ -77,7 +77,7 @@ class TestClient(object):
         with self._caplog.at_level(30):
             assert (
                 "Missing one or more required body parameters: prime_award_types or sub_award_types"
-                in self._caplog.records[-2].message
+                in self._caplog.records[-1].message
             )
 
     def test_bulk_download_awards_using_arguments_200_response(self, usa):
@@ -112,3 +112,6 @@ class TestClient(object):
     def test_awards_200_response(self, usa):
         response = usa.awards(award_id="CONT_AWD_12639519P0311_12K3_-NONE-_-NONE-")
         assert response.status_code == 200
+
+
+# pytest --log-cli-level=10
