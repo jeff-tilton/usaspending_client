@@ -168,6 +168,7 @@ class USASpending:
         self._log_response_(response)
         return response
 
+    @LD
     def bulk_download_status(self, file_name):
         """This method returns the current status of a download job
          that has been requested with the v2/bulk_download/awards/
@@ -375,6 +376,27 @@ class USASpending:
 
     @LD
     def awards(self, award_id, return_json=False):
+        """Short summary.
+
+        Parameters
+        ----------
+        award_id : type
+            Description of parameter `award_id`.
+        return_json : type
+            Description of parameter `return_json` (the default is False).
+
+        Returns
+        -------
+        type
+            Description of returned object.
+
+        Examples
+        --------
+        Examples should be written in doctest format, and
+        should illustrate how to use the function/class.
+        >>>
+
+        """
         url = self.BASE_URL + f"/api/v2/awards/{award_id}"
         response = requests.get(url)
         self._log_response_(response)
@@ -384,6 +406,27 @@ class USASpending:
 
     @LD
     def awards_list(self, award_ids, return_json=False):
+        """Short summary.
+
+        Parameters
+        ----------
+        award_ids : type
+            Description of parameter `award_ids`.
+        return_json : type
+            Description of parameter `return_json` (the default is False).
+
+        Returns
+        -------
+        type
+            Description of returned object.
+
+        Examples
+        --------
+        Examples should be written in doctest format, and
+        should illustrate how to use the function/class.
+        >>>
+
+        """
         result = []
         for award_id in award_ids:
             try:
@@ -394,6 +437,25 @@ class USASpending:
 
     @LD
     def awards_df(self, award_ids):
+        """Short summary.
+
+        Parameters
+        ----------
+        award_ids : type
+            Description of parameter `award_ids`.
+
+        Returns
+        -------
+        type
+            Description of returned object.
+
+        Examples
+        --------
+        Examples should be written in doctest format, and
+        should illustrate how to use the function/class.
+        >>>
+
+        """
         awards = self.awards_list(award_ids, return_json=True)
         flattened_awards = [flatten_dict(award) for award in awards]
         df = pd.DataFrame(awards)
