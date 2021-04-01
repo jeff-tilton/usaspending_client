@@ -121,8 +121,6 @@ class USASpending:
             - `&#39;domestic&#39;`
             - `&#39;foreign&#39;`
 
-
-
         recipient_locations : array[Location]
 
         recipient_scope : enum[string]
@@ -130,10 +128,9 @@ class USASpending:
             - `&#39;domestic&#39;`
             - `&#39;foreign&#39;`
 
-
         sub_award_types : array[enum[string]]
 
-            - `&#39;grant`&#39;
+            - `&#39;grant&#39;`
             - `&#39;procurement&#39;`
 
         filters : object
@@ -154,16 +151,16 @@ class USASpending:
 
             -- `&#39;funding&#39;`
 
-            -- `&#39;awarding`&#39;
+            -- `&#39;awarding&#39;`
 
         ## Location: object
 
-        - `&#39;country`&#39;: str
-        - `&#39;state`&#39;: str
-        - `&#39;county`&#39;: str
-        - `&#39;city`&#39;: str
-        - `&#39;district`&#39;: str
-        - `&#39;zip`&#39;: str
+        - `&#39;country&#39;`: str
+        - `&#39;state&#39;`: str
+        - `&#39;county&#39;`: str
+        - `&#39;city&#39;`: str
+        - `&#39;district&#39;`: str
+        - `&#39;zip&#39;`: str
 
         Returns
         -------
@@ -293,7 +290,7 @@ class USASpending:
 
         sub_award_types : array[enum[string]]
 
-            - `&#39;grant`&#39;
+            - `&#39;grant&#39;`
             - `&#39;procurement&#39;`
 
         filters : object
@@ -322,16 +319,16 @@ class USASpending:
 
             -- `&#39;funding&#39;`
 
-            -- `&#39;awarding`&#39;
+            -- `&#39;awarding&#39;`
 
         ## Location: object
 
-        - `&#39;country`&#39;: str
-        - `&#39;state`&#39;: str
-        - `&#39;county`&#39;: str
-        - `&#39;city`&#39;: str
-        - `&#39;district`&#39;: str
-        - `&#39;zip`&#39;: str
+        - `&#39;country&#39;`: str
+        - `&#39;state&#39;`: str
+        - `&#39;county&#39;`: str
+        - `&#39;city&#39;`: str
+        - `&#39;district&#39;`: str
+        - `&#39;zip&#39;`: str
 
         Returns
         -------
@@ -524,8 +521,6 @@ class USASpending:
             - `&#39;domestic&#39;`
             - `&#39;foreign&#39;`
 
-
-
         recipient_locations : array[Location]
 
         recipient_scope : enum[string]
@@ -533,10 +528,9 @@ class USASpending:
             - `&#39;domestic&#39;`
             - `&#39;foreign&#39;`
 
-
         sub_award_types : array[enum[string]]
 
-            - `&#39;grant`&#39;
+            - `&#39;grant&#39;`
             - `&#39;procurement&#39;`
 
         filters : object
@@ -557,16 +551,16 @@ class USASpending:
 
             -- `&#39;funding&#39;`
 
-            -- `&#39;awarding`&#39;
+            -- `&#39;awarding&#39;`
 
         ## Location: object
 
-        - `&#39;country`&#39;: str
-        - `&#39;state`&#39;: str
-        - `&#39;county`&#39;: str
-        - `&#39;city`&#39;: str
-        - `&#39;district`&#39;: str
-        - `&#39;zip`&#39;: str
+        - `&#39;country&#39;`: str
+        - `&#39;state&#39;`: str
+        - `&#39;county&#39;`: str
+        - `&#39;city&#39;`: str
+        - `&#39;district&#39;`: str
+        - `&#39;zip&#39;`: str
 
         Returns
         -------
@@ -696,7 +690,7 @@ class USASpending:
 
         sub_award_types : array[enum[string]]
 
-            - `&#39;grant`&#39;
+            - `&#39;grant&#39;`
             - `&#39;procurement&#39;`
 
         filters : object
@@ -725,16 +719,16 @@ class USASpending:
 
             -- `&#39;funding&#39;`
 
-            -- `&#39;awarding`&#39;
+            -- `&#39;awarding&#39;`
 
         ## Location: object
 
-        - `&#39;country`&#39;: str
-        - `&#39;state`&#39;: str
-        - `&#39;county`&#39;: str
-        - `&#39;city`&#39;: str
-        - `&#39;district`&#39;: str
-        - `&#39;zip`&#39;: str
+        - `&#39;country&#39;`: str
+        - `&#39;state&#39;`: str
+        - `&#39;county&#39;`: str
+        - `&#39;city&#39;`: str
+        - `&#39;district&#39;`: str
+        - `&#39;zip&#39;`: str
 
         Returns
         -------
@@ -961,7 +955,7 @@ zipfile of award data in CSV form for download.
 <dt><strong><code>sub_award_types</code></strong> :&ensp;<code>array[enum[string]]</code></dt>
 <dd>
 <ul>
-<li><code>'grant</code>'</li>
+<li><code>'grant'</code></li>
 <li><code>'procurement'</code></li>
 </ul>
 </dd>
@@ -986,17 +980,17 @@ See <a href="https://github.com/fedspendingtransparency/usaspending-api/blob/mas
 <li>
 <p>type: enum[str]</p>
 <p>&ndash; <code>'funding'</code></p>
-<p>&ndash; <code>'awarding</code>'</p>
+<p>&ndash; <code>'awarding'</code></p>
 </li>
 </ul>
 <h2 id="location-object">Location: object</h2>
 <ul>
-<li><code>'country</code>': str</li>
-<li><code>'state</code>': str</li>
-<li><code>'county</code>': str</li>
-<li><code>'city</code>': str</li>
-<li><code>'district</code>': str</li>
-<li><code>'zip</code>': str</li>
+<li><code>'country'</code>: str</li>
+<li><code>'state'</code>: str</li>
+<li><code>'county'</code>: str</li>
+<li><code>'city'</code>: str</li>
+<li><code>'district'</code>: str</li>
+<li><code>'zip'</code>: str</li>
 </ul>
 <h2 id="returns">Returns</h2>
 <dl>
@@ -1094,7 +1088,7 @@ def bulk_awards(
 
     sub_award_types : array[enum[string]]
 
-        - `&#39;grant`&#39;
+        - `&#39;grant&#39;`
         - `&#39;procurement&#39;`
 
     filters : object
@@ -1123,16 +1117,16 @@ def bulk_awards(
 
         -- `&#39;funding&#39;`
 
-        -- `&#39;awarding`&#39;
+        -- `&#39;awarding&#39;`
 
     ## Location: object
 
-    - `&#39;country`&#39;: str
-    - `&#39;state`&#39;: str
-    - `&#39;county`&#39;: str
-    - `&#39;city`&#39;: str
-    - `&#39;district`&#39;: str
-    - `&#39;zip`&#39;: str
+    - `&#39;country&#39;`: str
+    - `&#39;state&#39;`: str
+    - `&#39;county&#39;`: str
+    - `&#39;city&#39;`: str
+    - `&#39;district&#39;`: str
+    - `&#39;zip&#39;`: str
 
     Returns
     -------
@@ -1276,7 +1270,7 @@ zipfile of award data in CSV form for download.
 <dt><strong><code>sub_award_types</code></strong> :&ensp;<code>array[enum[string]]</code></dt>
 <dd>
 <ul>
-<li><code>'grant</code>'</li>
+<li><code>'grant'</code></li>
 <li><code>'procurement'</code></li>
 </ul>
 </dd>
@@ -1295,17 +1289,17 @@ See <a href="https://github.com/fedspendingtransparency/usaspending-api/blob/mas
 <li>
 <p>type: enum[str]</p>
 <p>&ndash; <code>'funding'</code></p>
-<p>&ndash; <code>'awarding</code>'</p>
+<p>&ndash; <code>'awarding'</code></p>
 </li>
 </ul>
 <h2 id="location-object">Location: object</h2>
 <ul>
-<li><code>'country</code>': str</li>
-<li><code>'state</code>': str</li>
-<li><code>'county</code>': str</li>
-<li><code>'city</code>': str</li>
-<li><code>'district</code>': str</li>
-<li><code>'zip</code>': str</li>
+<li><code>'country'</code>: str</li>
+<li><code>'state'</code>: str</li>
+<li><code>'county'</code>: str</li>
+<li><code>'city'</code>: str</li>
+<li><code>'district'</code>: str</li>
+<li><code>'zip'</code>: str</li>
 </ul>
 <h2 id="returns">Returns</h2>
 <dl>
@@ -1387,8 +1381,6 @@ def bulk_download_awards(
         - `&#39;domestic&#39;`
         - `&#39;foreign&#39;`
 
-
-
     recipient_locations : array[Location]
 
     recipient_scope : enum[string]
@@ -1396,10 +1388,9 @@ def bulk_download_awards(
         - `&#39;domestic&#39;`
         - `&#39;foreign&#39;`
 
-
     sub_award_types : array[enum[string]]
 
-        - `&#39;grant`&#39;
+        - `&#39;grant&#39;`
         - `&#39;procurement&#39;`
 
     filters : object
@@ -1420,16 +1411,16 @@ def bulk_download_awards(
 
         -- `&#39;funding&#39;`
 
-        -- `&#39;awarding`&#39;
+        -- `&#39;awarding&#39;`
 
     ## Location: object
 
-    - `&#39;country`&#39;: str
-    - `&#39;state`&#39;: str
-    - `&#39;county`&#39;: str
-    - `&#39;city`&#39;: str
-    - `&#39;district`&#39;: str
-    - `&#39;zip`&#39;: str
+    - `&#39;country&#39;`: str
+    - `&#39;state&#39;`: str
+    - `&#39;county&#39;`: str
+    - `&#39;city&#39;`: str
+    - `&#39;district&#39;`: str
+    - `&#39;zip&#39;`: str
 
     Returns
     -------
