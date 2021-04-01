@@ -44,21 +44,22 @@ def log_decorator(logger, level=10):
     return real_decorator
 
 
-def flatten_dict(nested_dictionary):
+# TODO: make this do a hierarchical index
+def flatten_dict(nested_dictionary, delimiter=&#34;:&#34;):
     &#34;Flattens a nested dictionary&#34;
     res = {}
 
-    def get_all_values(nested_dictionary, parent_key):
+    def get_all_values(nested_dictionary, parent_key, delimiter=delimiter):
         # ref: https://www.kite.com/python/answers/how-to-loop-through-all-nested-dictionary-values-using-a-for-loop-in-python
         for key, value in nested_dictionary.items():
             if type(value) is dict:
                 if parent_key:
-                    k = f&#34;{parent_key}__{key}&#34;
+                    k = f&#34;{parent_key}{delimiter}{key}&#34;
                 else:
                     k = key
                 get_all_values(value, parent_key=k)
             else:
-                k = f&#34;{parent_key}__{key}&#34;
+                k = f&#34;{parent_key}{delimiter}{key}&#34;
                 res.update({k: value})
 
     get_all_values(nested_dictionary=nested_dictionary, parent_key=&#34;&#34;)
@@ -73,7 +74,7 @@ def flatten_dict(nested_dictionary):
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="usaspending_client.utils.flatten_dict"><code class="name flex">
-<span>def <span class="ident">flatten_dict</span></span>(<span>nested_dictionary)</span>
+<span>def <span class="ident">flatten_dict</span></span>(<span>nested_dictionary, delimiter=':')</span>
 </code></dt>
 <dd>
 <div class="desc"><p>Flattens a nested dictionary</p></div>
@@ -81,21 +82,21 @@ def flatten_dict(nested_dictionary):
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def flatten_dict(nested_dictionary):
+<pre><code class="python">def flatten_dict(nested_dictionary, delimiter=&#34;:&#34;):
     &#34;Flattens a nested dictionary&#34;
     res = {}
 
-    def get_all_values(nested_dictionary, parent_key):
+    def get_all_values(nested_dictionary, parent_key, delimiter=delimiter):
         # ref: https://www.kite.com/python/answers/how-to-loop-through-all-nested-dictionary-values-using-a-for-loop-in-python
         for key, value in nested_dictionary.items():
             if type(value) is dict:
                 if parent_key:
-                    k = f&#34;{parent_key}__{key}&#34;
+                    k = f&#34;{parent_key}{delimiter}{key}&#34;
                 else:
                     k = key
                 get_all_values(value, parent_key=k)
             else:
-                k = f&#34;{parent_key}__{key}&#34;
+                k = f&#34;{parent_key}{delimiter}{key}&#34;
                 res.update({k: value})
 
     get_all_values(nested_dictionary=nested_dictionary, parent_key=&#34;&#34;)
