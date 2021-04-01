@@ -429,10 +429,14 @@ class USASpending:
         """
         result = []
         for award_id in award_ids:
+
             try:
                 response = self.awards(award_id=award_id, return_json=return_json)
             except:
                 LOGGER.error(f"Error requesting award id: {award_id}")
+
+            result.append(response)
+
         return result
 
     @LD
