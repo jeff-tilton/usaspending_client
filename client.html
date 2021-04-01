@@ -196,6 +196,7 @@ class USASpending:
         self._log_response_(response)
         return response
 
+    @LD
     def bulk_download_status(self, file_name):
         &#34;&#34;&#34;This method returns the current status of a download job
          that has been requested with the v2/bulk_download/awards/
@@ -403,6 +404,27 @@ class USASpending:
 
     @LD
     def awards(self, award_id, return_json=False):
+        &#34;&#34;&#34;Short summary.
+
+        Parameters
+        ----------
+        award_id : type
+            Description of parameter `award_id`.
+        return_json : type
+            Description of parameter `return_json` (the default is False).
+
+        Returns
+        -------
+        type
+            Description of returned object.
+
+        Examples
+        --------
+        Examples should be written in doctest format, and
+        should illustrate how to use the function/class.
+        &gt;&gt;&gt;
+
+        &#34;&#34;&#34;
         url = self.BASE_URL + f&#34;/api/v2/awards/{award_id}&#34;
         response = requests.get(url)
         self._log_response_(response)
@@ -412,6 +434,27 @@ class USASpending:
 
     @LD
     def awards_list(self, award_ids, return_json=False):
+        &#34;&#34;&#34;Short summary.
+
+        Parameters
+        ----------
+        award_ids : type
+            Description of parameter `award_ids`.
+        return_json : type
+            Description of parameter `return_json` (the default is False).
+
+        Returns
+        -------
+        type
+            Description of returned object.
+
+        Examples
+        --------
+        Examples should be written in doctest format, and
+        should illustrate how to use the function/class.
+        &gt;&gt;&gt;
+
+        &#34;&#34;&#34;
         result = []
         for award_id in award_ids:
             try:
@@ -422,6 +465,25 @@ class USASpending:
 
     @LD
     def awards_df(self, award_ids):
+        &#34;&#34;&#34;Short summary.
+
+        Parameters
+        ----------
+        award_ids : type
+            Description of parameter `award_ids`.
+
+        Returns
+        -------
+        type
+            Description of returned object.
+
+        Examples
+        --------
+        Examples should be written in doctest format, and
+        should illustrate how to use the function/class.
+        &gt;&gt;&gt;
+
+        &#34;&#34;&#34;
         awards = self.awards_list(award_ids, return_json=True)
         flattened_awards = [flatten_dict(award) for award in awards]
         df = pd.DataFrame(awards)
@@ -596,6 +658,7 @@ class USASpending:
         self._log_response_(response)
         return response
 
+    @LD
     def bulk_download_status(self, file_name):
         &#34;&#34;&#34;This method returns the current status of a download job
          that has been requested with the v2/bulk_download/awards/
@@ -803,6 +866,27 @@ class USASpending:
 
     @LD
     def awards(self, award_id, return_json=False):
+        &#34;&#34;&#34;Short summary.
+
+        Parameters
+        ----------
+        award_id : type
+            Description of parameter `award_id`.
+        return_json : type
+            Description of parameter `return_json` (the default is False).
+
+        Returns
+        -------
+        type
+            Description of returned object.
+
+        Examples
+        --------
+        Examples should be written in doctest format, and
+        should illustrate how to use the function/class.
+        &gt;&gt;&gt;
+
+        &#34;&#34;&#34;
         url = self.BASE_URL + f&#34;/api/v2/awards/{award_id}&#34;
         response = requests.get(url)
         self._log_response_(response)
@@ -812,6 +896,27 @@ class USASpending:
 
     @LD
     def awards_list(self, award_ids, return_json=False):
+        &#34;&#34;&#34;Short summary.
+
+        Parameters
+        ----------
+        award_ids : type
+            Description of parameter `award_ids`.
+        return_json : type
+            Description of parameter `return_json` (the default is False).
+
+        Returns
+        -------
+        type
+            Description of returned object.
+
+        Examples
+        --------
+        Examples should be written in doctest format, and
+        should illustrate how to use the function/class.
+        &gt;&gt;&gt;
+
+        &#34;&#34;&#34;
         result = []
         for award_id in award_ids:
             try:
@@ -822,6 +927,25 @@ class USASpending:
 
     @LD
     def awards_df(self, award_ids):
+        &#34;&#34;&#34;Short summary.
+
+        Parameters
+        ----------
+        award_ids : type
+            Description of parameter `award_ids`.
+
+        Returns
+        -------
+        type
+            Description of returned object.
+
+        Examples
+        --------
+        Examples should be written in doctest format, and
+        should illustrate how to use the function/class.
+        &gt;&gt;&gt;
+
+        &#34;&#34;&#34;
         awards = self.awards_list(award_ids, return_json=True)
         flattened_awards = [flatten_dict(award) for award in awards]
         df = pd.DataFrame(awards)
@@ -833,13 +957,54 @@ class USASpending:
 <span>def <span class="ident">awards</span></span>(<span>self, award_id, return_json=False)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Short summary.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>award_id</code></strong> :&ensp;<code>type</code></dt>
+<dd>Description of parameter <code>award_id</code>.</dd>
+<dt><strong><code>return_json</code></strong> :&ensp;<code>type</code></dt>
+<dd>Description of parameter <code>return_json</code> (the default is False).</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>type</code></dt>
+<dd>Description of returned object.</dd>
+</dl>
+<h2 id="examples">Examples</h2>
+<p>Examples should be written in doctest format, and
+should illustrate how to use the function/class.</p>
+<blockquote>
+<blockquote>
+<blockquote></blockquote>
+</blockquote>
+</blockquote></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@LD
 def awards(self, award_id, return_json=False):
+    &#34;&#34;&#34;Short summary.
+
+    Parameters
+    ----------
+    award_id : type
+        Description of parameter `award_id`.
+    return_json : type
+        Description of parameter `return_json` (the default is False).
+
+    Returns
+    -------
+    type
+        Description of returned object.
+
+    Examples
+    --------
+    Examples should be written in doctest format, and
+    should illustrate how to use the function/class.
+    &gt;&gt;&gt;
+
+    &#34;&#34;&#34;
     url = self.BASE_URL + f&#34;/api/v2/awards/{award_id}&#34;
     response = requests.get(url)
     self._log_response_(response)
@@ -852,13 +1017,50 @@ def awards(self, award_id, return_json=False):
 <span>def <span class="ident">awards_df</span></span>(<span>self, award_ids)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Short summary.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>award_ids</code></strong> :&ensp;<code>type</code></dt>
+<dd>Description of parameter <code>award_ids</code>.</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>type</code></dt>
+<dd>Description of returned object.</dd>
+</dl>
+<h2 id="examples">Examples</h2>
+<p>Examples should be written in doctest format, and
+should illustrate how to use the function/class.</p>
+<blockquote>
+<blockquote>
+<blockquote></blockquote>
+</blockquote>
+</blockquote></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@LD
 def awards_df(self, award_ids):
+    &#34;&#34;&#34;Short summary.
+
+    Parameters
+    ----------
+    award_ids : type
+        Description of parameter `award_ids`.
+
+    Returns
+    -------
+    type
+        Description of returned object.
+
+    Examples
+    --------
+    Examples should be written in doctest format, and
+    should illustrate how to use the function/class.
+    &gt;&gt;&gt;
+
+    &#34;&#34;&#34;
     awards = self.awards_list(award_ids, return_json=True)
     flattened_awards = [flatten_dict(award) for award in awards]
     df = pd.DataFrame(awards)
@@ -869,13 +1071,54 @@ def awards_df(self, award_ids):
 <span>def <span class="ident">awards_list</span></span>(<span>self, award_ids, return_json=False)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Short summary.</p>
+<h2 id="parameters">Parameters</h2>
+<dl>
+<dt><strong><code>award_ids</code></strong> :&ensp;<code>type</code></dt>
+<dd>Description of parameter <code>award_ids</code>.</dd>
+<dt><strong><code>return_json</code></strong> :&ensp;<code>type</code></dt>
+<dd>Description of parameter <code>return_json</code> (the default is False).</dd>
+</dl>
+<h2 id="returns">Returns</h2>
+<dl>
+<dt><code>type</code></dt>
+<dd>Description of returned object.</dd>
+</dl>
+<h2 id="examples">Examples</h2>
+<p>Examples should be written in doctest format, and
+should illustrate how to use the function/class.</p>
+<blockquote>
+<blockquote>
+<blockquote></blockquote>
+</blockquote>
+</blockquote></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@LD
 def awards_list(self, award_ids, return_json=False):
+    &#34;&#34;&#34;Short summary.
+
+    Parameters
+    ----------
+    award_ids : type
+        Description of parameter `award_ids`.
+    return_json : type
+        Description of parameter `return_json` (the default is False).
+
+    Returns
+    -------
+    type
+        Description of returned object.
+
+    Examples
+    --------
+    Examples should be written in doctest format, and
+    should illustrate how to use the function/class.
+    &gt;&gt;&gt;
+
+    &#34;&#34;&#34;
     result = []
     for award_id in award_ids:
         try:
@@ -1474,7 +1717,8 @@ or v2/bulk_download/transaction/ endpoint that same day.
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def bulk_download_status(self, file_name):
+<pre><code class="python">@LD
+def bulk_download_status(self, file_name):
     &#34;&#34;&#34;This method returns the current status of a download job
      that has been requested with the v2/bulk_download/awards/
      or v2/bulk_download/transaction/ endpoint that same day.
