@@ -354,6 +354,7 @@ class USASpending:
 
         try:
             file_url = data["file_url"]
+            LOGGER.debug(file_url)
         except KeyError:
             raise KeyError(f"Bulk download did not finish in {attempts} attempts.")
 
